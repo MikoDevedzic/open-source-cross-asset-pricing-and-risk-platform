@@ -1,0 +1,59 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg:         #060a0e;
+  --bg-deep:    #03060a;
+  --panel:      #0b1219;
+  --panel-2:    #0f1820;
+  --border:     #192433;
+  --border-hi:  #213040;
+  --text:       #7da8c0;
+  --text-hi:    #b8d8e8;
+  --text-dim:   #344e62;
+  --accent:     #0ec9a0;
+  --accent-dim: #097a61;
+  --amber:      #e8a020;
+  --blue:       #3d8bc8;
+  --purple:     #9060cc;
+  --red:        #c84040;
+  --mono:       'JetBrains Mono', monospace;
+  --appbar-h:   48px;
+  --cfgnav-h:   38px;
+  --mdnav-h:    36px;
+  --sidebar-w:  260px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+.rj-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.rj-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
