@@ -1,0 +1,786 @@
+// ══════════════════════════════════════════════════════════════
+//  RATES CURVE UNIVERSE — ported from MarketData_v4.html
+//  curve_class: 'OIS' | 'BASIS' | 'XCCY' | 'FUNDING'
+// ══════════════════════════════════════════════════════════════
+
+export const RATES_CURVES = [
+
+  // ── USD ────────────────────────────────────────────────────
+  {
+    id: 'USD_SOFR', ccy: 'USD', flag: '🇺🇸', name: 'SOFR OIS', fullName: 'USD SOFR OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Sofr()', dayCounter: 'Actual/360',
+    calendar: 'UnitedStates(FederalReserve)', settlementDays: 1, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 2, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#0ec9a0',
+    instruments: [
+      { en: true,  type: 'OISDeposit', tenor: 'ON',  ticker: 'USOSFR=',     quote: 5.310, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '1W',  ticker: 'USOSFRA=',    quote: 5.305, unit: '%' },
+      { en: false, type: 'OIS',        tenor: '2W',  ticker: 'USOSFR2W=',   quote: 5.300, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '1M',  ticker: 'USOSFR1M=',   quote: 5.280, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '3M',  ticker: 'USOSFR3M=',   quote: 5.140, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '6M',  ticker: 'USOSFR6M=',   quote: 4.900, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '1Y',  ticker: 'USOSFR1Y=',   quote: 4.480, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '2Y',  ticker: 'USOSFR2Y=',   quote: 4.050, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '3Y',  ticker: 'USOSFR3Y=',   quote: 3.900, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '5Y',  ticker: 'USOSFR5Y=',   quote: 3.780, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '7Y',  ticker: 'USOSFR7Y=',   quote: 3.740, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '10Y', ticker: 'USOSFR10Y=',  quote: 3.740, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '20Y', ticker: 'USOSFR20Y=',  quote: 3.850, unit: '%' },
+      { en: true,  type: 'OIS',        tenor: '30Y', ticker: 'USOSFR30Y=',  quote: 3.800, unit: '%' },
+    ],
+  },
+  {
+    id: 'USD_EFFR', ccy: 'USD', flag: '🇺🇸', name: 'EFFR Basis', fullName: 'USD SOFR/EFFR Basis',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'Federal Funds vs SOFR basis. Fixed spread added to SOFR mother curve.',
+    qlHelper: 'BasisSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'BasisDeposit', tenor: 'ON',  ticker: 'USFFSSFD=',    quote: 8.0,  unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '1M',  ticker: 'USFFSSFD1M=',  quote: 8.5,  unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '3M',  ticker: 'USFFSSFD3M=',  quote: 9.0,  unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '6M',  ticker: 'USFFSSFD6M=',  quote: 9.5,  unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '1Y',  ticker: 'USFFSSFD1Y=',  quote: 10.0, unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '2Y',  ticker: 'USFFSSFD2Y=',  quote: 10.5, unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '3Y',  ticker: 'USFFSSFD3Y=',  quote: 11.0, unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '5Y',  ticker: 'USFFSSFD5Y=',  quote: 11.5, unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '7Y',  ticker: 'USFFSSFD7Y=',  quote: 11.8, unit: 'bp' },
+      { en: true, type: 'Basis',        tenor: '10Y', ticker: 'USFFSSFD10Y=', quote: 12.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'USD_TSOFR_1M', ccy: 'USD', flag: '🇺🇸', name: 'Term SOFR 1M', fullName: 'USD Term SOFR 1M',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'CME Term SOFR 1M vs compounded SOFR. Used for loans, CLOs, and short FRNs.',
+    qlHelper: 'IborSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'USDTSOFR1M1Y=',  quote: 4.520, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'USDTSOFR1M2Y=',  quote: 4.090, unit: '%' },
+      { en: true, type: 'IRS', tenor: '3Y',  ticker: 'USDTSOFR1M3Y=',  quote: 3.940, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'USDTSOFR1M5Y=',  quote: 3.820, unit: '%' },
+      { en: true, type: 'IRS', tenor: '7Y',  ticker: 'USDTSOFR1M7Y=',  quote: 3.785, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'USDTSOFR1M10Y=', quote: 3.785, unit: '%' },
+      { en: true, type: 'IRS', tenor: '20Y', ticker: 'USDTSOFR1M20Y=', quote: 3.895, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'USDTSOFR1M30Y=', quote: 3.845, unit: '%' },
+    ],
+  },
+  {
+    id: 'USD_TSOFR_3M', ccy: 'USD', flag: '🇺🇸', name: 'Term SOFR 3M', fullName: 'USD Term SOFR 3M',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'CME Term SOFR 3M vs compounded SOFR. Dominant USD floating leg reference for IRS and FRNs.',
+    qlHelper: 'IborSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'USDTSOFR3M1Y=',  quote: 4.530, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'USDTSOFR3M2Y=',  quote: 4.095, unit: '%' },
+      { en: true, type: 'IRS', tenor: '3Y',  ticker: 'USDTSOFR3M3Y=',  quote: 3.945, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'USDTSOFR3M5Y=',  quote: 3.825, unit: '%' },
+      { en: true, type: 'IRS', tenor: '7Y',  ticker: 'USDTSOFR3M7Y=',  quote: 3.790, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'USDTSOFR3M10Y=', quote: 3.790, unit: '%' },
+      { en: true, type: 'IRS', tenor: '20Y', ticker: 'USDTSOFR3M20Y=', quote: 3.900, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'USDTSOFR3M30Y=', quote: 3.850, unit: '%' },
+    ],
+  },
+  {
+    id: 'USD_TSOFR_6M', ccy: 'USD', flag: '🇺🇸', name: 'Term SOFR 6M', fullName: 'USD Term SOFR 6M',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'CME Term SOFR 6M vs compounded SOFR. Used for semi-annual FRNs and some IRS.',
+    qlHelper: 'IborSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'USDTSOFR6M1Y=',  quote: 4.545, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'USDTSOFR6M2Y=',  quote: 4.105, unit: '%' },
+      { en: true, type: 'IRS', tenor: '3Y',  ticker: 'USDTSOFR6M3Y=',  quote: 3.955, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'USDTSOFR6M5Y=',  quote: 3.840, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'USDTSOFR6M10Y=', quote: 3.810, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'USDTSOFR6M30Y=', quote: 3.870, unit: '%' },
+    ],
+  },
+  {
+    id: 'USD_1M3M', ccy: 'USD', flag: '🇺🇸', name: '1M/3M Basis', fullName: 'USD SOFR 1M/3M Tenor Basis',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'Term SOFR 1M vs 3M tenor basis spread. Reflects demand/supply imbalance between 1M and 3M reset frequencies.',
+    qlHelper: 'BasisSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'Basis', tenor: '1Y',  ticker: 'USDS1F3F1Y=',  quote: -2.5, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '2Y',  ticker: 'USDS1F3F2Y=',  quote: -2.8, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '5Y',  ticker: 'USDS1F3F5Y=',  quote: -3.2, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '10Y', ticker: 'USDS1F3F10Y=', quote: -3.5, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'USD_3M6M', ccy: 'USD', flag: '🇺🇸', name: '3M/6M Basis', fullName: 'USD SOFR 3M/6M Tenor Basis',
+    curve_class: 'BASIS', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'Term SOFR 3M vs 6M tenor basis spread.',
+    qlHelper: 'BasisSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'Basis', tenor: '1Y',  ticker: 'USDS3F6F1Y=',  quote: -1.8, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '2Y',  ticker: 'USDS3F6F2Y=',  quote: -2.0, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '5Y',  ticker: 'USDS3F6F5Y=',  quote: -2.3, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '10Y', ticker: 'USDS3F6F10Y=', quote: -2.5, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'USD_FUNDING', ccy: 'USD', flag: '🇺🇸', name: 'USD Funding', fullName: 'USD Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'USD_SOFR', baseLabel: 'USD SOFR OIS',
+    description: 'Firm cost of funds = USD SOFR OIS + firm credit spread. Drives FVA and ColVA calculations.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 12, W1: 15, M1: 20, M3: 28, M6: 35, Y1: 42, Y2: 52, Y3: 58, Y5: 65, Y7: 70, Y10: 75, Y20: 85, Y30: 88 },
+    oisRef: { ON: 5.310, M1: 5.280, M3: 5.140, M6: 4.900, Y1: 4.480, Y2: 4.050, Y3: 3.900, Y5: 3.780, Y7: 3.740, Y10: 3.740, Y20: 3.850, Y30: 3.800 },
+  },
+
+  // ── EUR ────────────────────────────────────────────────────
+  {
+    id: 'EUR_ESTR', ccy: 'EUR', flag: '🇪🇺', name: '€STR OIS', fullName: 'EUR €STR OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Estr()', dayCounter: 'Actual/360',
+    calendar: 'TARGET()', settlementDays: 2, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 2, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'ESTRRATE=',   quote: 3.400, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1W',  ticker: 'EURESTRIA=',  quote: 3.390, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'EURESTR1M=',  quote: 3.350, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'EURESTR3M=',  quote: 3.150, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'EURESTR6M=',  quote: 2.900, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'EURESTR1Y=',  quote: 2.580, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '2Y',  ticker: 'EURESTR2Y=',  quote: 2.320, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3Y',  ticker: 'EURESTR3Y=',  quote: 2.280, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'EURESTR5Y=',  quote: 2.300, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'EURESTR10Y=', quote: 2.480, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '20Y', ticker: 'EURESTR20Y=', quote: 2.580, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '30Y', ticker: 'EURESTR30Y=', quote: 2.550, unit: '%' },
+    ],
+  },
+  {
+    id: 'EUR_EURIBOR_3M', ccy: 'EUR', flag: '🇪🇺', name: 'EURIBOR 3M', fullName: 'EUR EURIBOR 3M',
+    curve_class: 'BASIS', baseCurveId: 'EUR_ESTR', baseLabel: 'EUR €STR OIS',
+    description: 'EURIBOR 3M vs €STR compounded. Dominant EUR floating leg — survives under BMR regulatory approval.',
+    qlHelper: 'IborSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'EURAB6E3Y1Y=',  quote: 2.720, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'EURAB6E3Y2Y=',  quote: 2.460, unit: '%' },
+      { en: true, type: 'IRS', tenor: '3Y',  ticker: 'EURAB6E3Y3Y=',  quote: 2.420, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'EURAB6E3Y5Y=',  quote: 2.440, unit: '%' },
+      { en: true, type: 'IRS', tenor: '7Y',  ticker: 'EURAB6E3Y7Y=',  quote: 2.520, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'EURAB6E3Y10Y=', quote: 2.620, unit: '%' },
+      { en: true, type: 'IRS', tenor: '20Y', ticker: 'EURAB6E3Y20Y=', quote: 2.720, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'EURAB6E3Y30Y=', quote: 2.690, unit: '%' },
+    ],
+  },
+  {
+    id: 'EUR_EURIBOR_6M', ccy: 'EUR', flag: '🇪🇺', name: 'EURIBOR 6M', fullName: 'EUR EURIBOR 6M',
+    curve_class: 'BASIS', baseCurveId: 'EUR_ESTR', baseLabel: 'EUR €STR OIS',
+    description: 'EURIBOR 6M vs €STR. Used for EUR mortgages and semi-annual FRNs.',
+    qlHelper: 'IborSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'EURAB6E6Y1Y=',  quote: 2.740, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'EURAB6E6Y2Y=',  quote: 2.480, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'EURAB6E6Y5Y=',  quote: 2.460, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'EURAB6E6Y10Y=', quote: 2.640, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'EURAB6E6Y30Y=', quote: 2.710, unit: '%' },
+    ],
+  },
+  {
+    id: 'EUR_1M3M', ccy: 'EUR', flag: '🇪🇺', name: '1M/3M Basis', fullName: 'EUR EURIBOR 1M/3M Basis',
+    curve_class: 'BASIS', baseCurveId: 'EUR_ESTR', baseLabel: 'EUR €STR OIS',
+    description: 'EURIBOR 1M vs 3M tenor basis spread.',
+    qlHelper: 'BasisSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'Basis', tenor: '1Y',  ticker: 'EUBS1F3F1Y=',  quote: -4.5, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '5Y',  ticker: 'EUBS1F3F5Y=',  quote: -5.0, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '10Y', ticker: 'EUBS1F3F10Y=', quote: -5.5, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'EUR_3M6M', ccy: 'EUR', flag: '🇪🇺', name: '3M/6M Basis', fullName: 'EUR EURIBOR 3M/6M Basis',
+    curve_class: 'BASIS', baseCurveId: 'EUR_ESTR', baseLabel: 'EUR €STR OIS',
+    description: 'EURIBOR 3M vs 6M tenor basis spread.',
+    qlHelper: 'BasisSwapRateHelper', color: '#3d8bc8',
+    instruments: [
+      { en: true, type: 'Basis', tenor: '1Y',  ticker: 'EUBS3F6F1Y=',  quote: -3.0, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '5Y',  ticker: 'EUBS3F6F5Y=',  quote: -3.5, unit: 'bp' },
+      { en: true, type: 'Basis', tenor: '10Y', ticker: 'EUBS3F6F10Y=', quote: -4.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'EUR_FUNDING', ccy: 'EUR', flag: '🇪🇺', name: 'EUR Funding', fullName: 'EUR Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'EUR_ESTR', baseLabel: 'EUR €STR OIS',
+    description: 'Firm cost of funds in EUR = €STR OIS + firm credit spread.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 14, M1: 22, M3: 30, M6: 38, Y1: 45, Y2: 55, Y3: 62, Y5: 70, Y7: 75, Y10: 80, Y20: 90, Y30: 92 },
+    oisRef: { ON: 3.400, M1: 3.350, M3: 3.150, M6: 2.900, Y1: 2.580, Y2: 2.320, Y3: 2.280, Y5: 2.300, Y7: 2.380, Y10: 2.480, Y20: 2.580, Y30: 2.550 },
+  },
+
+  // ── GBP ────────────────────────────────────────────────────
+  {
+    id: 'GBP_SONIA', ccy: 'GBP', flag: '🇬🇧', name: 'SONIA OIS', fullName: 'GBP SONIA OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Sonia()', dayCounter: 'Actual/365 Fixed',
+    calendar: 'UnitedKingdom(Exchange)', settlementDays: 0, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 0, telescopic: false,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#9060cc',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'SONIAONN=',    quote: 4.950, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'SONIAOIS1M=',  quote: 4.890, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'SONIAOIS3M=',  quote: 4.710, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'SONIAOIS6M=',  quote: 4.500, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'SONIAOIS1Y=',  quote: 4.180, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '2Y',  ticker: 'SONIAOIS2Y=',  quote: 3.880, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'SONIAOIS5Y=',  quote: 3.800, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'SONIAOIS10Y=', quote: 3.880, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '30Y', ticker: 'SONIAOIS30Y=', quote: 3.800, unit: '%' },
+    ],
+  },
+  {
+    id: 'GBP_SONIA_3M', ccy: 'GBP', flag: '🇬🇧', name: 'Term SONIA 3M', fullName: 'GBP Term SONIA 3M',
+    curve_class: 'BASIS', baseCurveId: 'GBP_SONIA', baseLabel: 'GBP SONIA OIS',
+    description: 'ICE/Refinitiv Term SONIA 3M vs compounded SONIA. Used for GBP loans and bonds.',
+    qlHelper: 'IborSwapRateHelper', color: '#9060cc',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'GBPSTSN3M1Y=',  quote: 4.220, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'GBPSTSN3M2Y=',  quote: 3.920, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'GBPSTSN3M5Y=',  quote: 3.840, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'GBPSTSN3M10Y=', quote: 3.920, unit: '%' },
+      { en: true, type: 'IRS', tenor: '30Y', ticker: 'GBPSTSN3M30Y=', quote: 3.840, unit: '%' },
+    ],
+  },
+  {
+    id: 'GBP_FUNDING', ccy: 'GBP', flag: '🇬🇧', name: 'GBP Funding', fullName: 'GBP Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'GBP_SONIA', baseLabel: 'GBP SONIA OIS',
+    description: 'Firm cost of funds in GBP = SONIA OIS + firm credit spread.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 10, M1: 18, M3: 25, M6: 32, Y1: 40, Y2: 50, Y3: 55, Y5: 62, Y7: 68, Y10: 72, Y20: 82, Y30: 85 },
+    oisRef: { ON: 4.950, M1: 4.890, M3: 4.710, M6: 4.500, Y1: 4.180, Y2: 3.880, Y3: 3.800, Y5: 3.800, Y7: 3.820, Y10: 3.880, Y20: 3.880, Y30: 3.800 },
+  },
+
+  // ── JPY ────────────────────────────────────────────────────
+  {
+    id: 'JPY_TONAR', ccy: 'JPY', flag: '🇯🇵', name: 'TONAR OIS', fullName: 'JPY TONAR OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Tonar()', dayCounter: 'Actual/365 Fixed',
+    calendar: 'Japan()', settlementDays: 2, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 2, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#e8a020',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'TONAR=',      quote: 0.230, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'JPYOIS1M=',   quote: 0.260, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'JPYOIS3M=',   quote: 0.300, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'JPYOIS6M=',   quote: 0.420, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'JPYOIS1Y=',   quote: 0.600, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '2Y',  ticker: 'JPYOIS2Y=',   quote: 0.780, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'JPYOIS5Y=',   quote: 1.000, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'JPYOIS10Y=',  quote: 1.120, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '30Y', ticker: 'JPYOIS30Y=',  quote: 1.120, unit: '%' },
+    ],
+  },
+  {
+    id: 'JPY_TIBOR_3M', ccy: 'JPY', flag: '🇯🇵', name: 'TIBOR 3M', fullName: 'JPY TIBOR 3M',
+    curve_class: 'BASIS', baseCurveId: 'JPY_TONAR', baseLabel: 'JPY TONAR OIS',
+    description: 'TIBOR 3M vs TONAR compounded. Still dominant in Japan for domestic IRS and bond markets.',
+    qlHelper: 'IborSwapRateHelper', color: '#e8a020',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'JPYAB3BT3M1Y=',  quote: 0.680, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'JPYAB3BT3M2Y=',  quote: 0.860, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'JPYAB3BT3M5Y=',  quote: 1.080, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'JPYAB3BT3M10Y=', quote: 1.200, unit: '%' },
+      { en: true, type: 'IRS', tenor: '20Y', ticker: 'JPYAB3BT3M20Y=', quote: 1.230, unit: '%' },
+    ],
+  },
+  {
+    id: 'JPY_TIBOR_6M', ccy: 'JPY', flag: '🇯🇵', name: 'TIBOR 6M', fullName: 'JPY TIBOR 6M',
+    curve_class: 'BASIS', baseCurveId: 'JPY_TONAR', baseLabel: 'JPY TONAR OIS',
+    description: 'TIBOR 6M vs TONAR. Semi-annual FRNs and select IRS structures.',
+    qlHelper: 'IborSwapRateHelper', color: '#e8a020',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'JPYAB6BT6M1Y=',  quote: 0.700, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'JPYAB6BT6M5Y=',  quote: 1.100, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'JPYAB6BT6M10Y=', quote: 1.220, unit: '%' },
+    ],
+  },
+  {
+    id: 'JPY_FUNDING', ccy: 'JPY', flag: '🇯🇵', name: 'JPY Funding', fullName: 'JPY Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'JPY_TONAR', baseLabel: 'JPY TONAR OIS',
+    description: 'Firm cost of funds in JPY = TONAR OIS + firm credit spread. Typically lower than other currencies.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 5, M1: 8, M3: 12, M6: 16, Y1: 20, Y2: 25, Y3: 28, Y5: 32, Y7: 36, Y10: 38, Y20: 42, Y30: 44 },
+    oisRef: { ON: 0.230, M1: 0.260, M3: 0.300, M6: 0.420, Y1: 0.600, Y2: 0.780, Y3: 0.880, Y5: 1.000, Y7: 1.080, Y10: 1.120, Y20: 1.150, Y30: 1.120 },
+  },
+
+  // ── CHF ────────────────────────────────────────────────────
+  {
+    id: 'CHF_SARON', ccy: 'CHF', flag: '🇨🇭', name: 'SARON OIS', fullName: 'CHF SARON OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Saron()', dayCounter: 'Actual/360',
+    calendar: 'Switzerland()', settlementDays: 2, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 2, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#d95040',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'SARONOIS=', quote: 0.900, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'CHFOIS1M=', quote: 0.880, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'CHFOIS3M=', quote: 0.820, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'CHFOIS6M=', quote: 0.720, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'CHFOIS1Y=', quote: 0.550, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'CHFOIS5Y=', quote: 0.480, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'CHFOIS10Y=',quote: 0.580, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '30Y', ticker: 'CHFOIS30Y=',quote: 0.600, unit: '%' },
+    ],
+  },
+  {
+    id: 'CHF_SARON_3M', ccy: 'CHF', flag: '🇨🇭', name: 'Term SARON 3M', fullName: 'CHF Term SARON 3M',
+    curve_class: 'BASIS', baseCurveId: 'CHF_SARON', baseLabel: 'CHF SARON OIS',
+    description: 'Term SARON 3M vs compounded SARON. Used for CHF loans and bonds post-LIBOR transition.',
+    qlHelper: 'IborSwapRateHelper', color: '#d95040',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'CHFTSRN3M1Y=',  quote: 0.595, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'CHFTSRN3M5Y=',  quote: 0.525, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'CHFTSRN3M10Y=', quote: 0.625, unit: '%' },
+    ],
+  },
+  {
+    id: 'CHF_FUNDING', ccy: 'CHF', flag: '🇨🇭', name: 'CHF Funding', fullName: 'CHF Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'CHF_SARON', baseLabel: 'CHF SARON OIS',
+    description: 'Firm cost of funds in CHF = SARON OIS + firm credit spread.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 10, M1: 15, M3: 22, M6: 28, Y1: 35, Y2: 42, Y3: 48, Y5: 55, Y7: 60, Y10: 62 },
+    oisRef: { ON: 0.900, M1: 0.880, M3: 0.820, M6: 0.720, Y1: 0.550, Y2: 0.480, Y3: 0.450, Y5: 0.480, Y7: 0.520, Y10: 0.580 },
+  },
+
+  // ── AUD ────────────────────────────────────────────────────
+  {
+    id: 'AUD_AONIA', ccy: 'AUD', flag: '🇦🇺', name: 'AONIA OIS', fullName: 'AUD AONIA OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Aonia()', dayCounter: 'Actual/365 Fixed',
+    calendar: 'Australia()', settlementDays: 0, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 0, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#1dc87a',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'AONIAAON=', quote: 4.350, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'AUDOIS1M=', quote: 4.320, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'AUDOIS3M=', quote: 4.220, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'AUDOIS6M=', quote: 4.050, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'AUDOIS1Y=', quote: 3.780, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'AUDOIS5Y=', quote: 3.680, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'AUDOIS10Y=',quote: 3.900, unit: '%' },
+    ],
+  },
+  {
+    id: 'AUD_BBSW_3M', ccy: 'AUD', flag: '🇦🇺', name: 'BBSW 3M', fullName: 'AUD BBSW 3M',
+    curve_class: 'BASIS', baseCurveId: 'AUD_AONIA', baseLabel: 'AUD AONIA OIS',
+    description: 'BBSW 3M vs AONIA. Australian Bank Bill Swap Rate — dominant floating reference for AUD IRS.',
+    qlHelper: 'IborSwapRateHelper', color: '#1dc87a',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'AUDAB3FB3M1Y=',  quote: 3.840, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'AUDAB3FB3M2Y=',  quote: 3.710, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'AUDAB3FB3M5Y=',  quote: 3.740, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'AUDAB3FB3M10Y=', quote: 3.960, unit: '%' },
+    ],
+  },
+  {
+    id: 'AUD_BBSW_6M', ccy: 'AUD', flag: '🇦🇺', name: 'BBSW 6M', fullName: 'AUD BBSW 6M',
+    curve_class: 'BASIS', baseCurveId: 'AUD_AONIA', baseLabel: 'AUD AONIA OIS',
+    description: 'BBSW 6M vs AONIA. Semi-annual FRNs and select corporate bonds.',
+    qlHelper: 'IborSwapRateHelper', color: '#1dc87a',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'AUDAB6FB6M1Y=',  quote: 3.860, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'AUDAB6FB6M5Y=',  quote: 3.760, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'AUDAB6FB6M10Y=', quote: 3.980, unit: '%' },
+    ],
+  },
+  {
+    id: 'AUD_FUNDING', ccy: 'AUD', flag: '🇦🇺', name: 'AUD Funding', fullName: 'AUD Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'AUD_AONIA', baseLabel: 'AUD AONIA OIS',
+    description: 'Firm cost of funds in AUD = AONIA OIS + firm credit spread.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 15, M1: 22, M3: 30, M6: 38, Y1: 45, Y2: 55, Y3: 60, Y5: 68, Y10: 75 },
+    oisRef: { ON: 4.350, M1: 4.320, M3: 4.220, M6: 4.050, Y1: 3.780, Y2: 3.650, Y3: 3.620, Y5: 3.680, Y10: 3.900 },
+  },
+
+  // ── CAD ────────────────────────────────────────────────────
+  {
+    id: 'CAD_CORRA', ccy: 'CAD', flag: '🇨🇦', name: 'CORRA OIS', fullName: 'CAD CORRA OIS',
+    curve_class: 'OIS', qlIndex: 'ql.Corra()', dayCounter: 'Actual/365 Fixed',
+    calendar: 'Canada()', settlementDays: 1, bdc: 'ModifiedFollowing',
+    payFreq: 'Annual', payLag: 2, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#ef6c2c',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'CORRA=',     quote: 4.250, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'CADOIS1M=',  quote: 4.180, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'CADOIS3M=',  quote: 3.980, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'CADOIS6M=',  quote: 3.720, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'CADOIS1Y=',  quote: 3.420, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3Y',  ticker: 'CADOIS3Y=',  quote: 3.150, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'CADOIS5Y=',  quote: 3.120, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'CADOIS10Y=', quote: 3.200, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '30Y', ticker: 'CADOIS30Y=', quote: 3.220, unit: '%' },
+    ],
+  },
+  {
+    id: 'CAD_CDOR_3M', ccy: 'CAD', flag: '🇨🇦', name: 'CDOR 3M (legacy)', fullName: 'CAD CDOR 3M',
+    curve_class: 'BASIS', baseCurveId: 'CAD_CORRA', baseLabel: 'CAD CORRA OIS',
+    description: 'CDOR 3M vs CORRA. Legacy — CDOR discontinued June 2024. Required for legacy trade valuation.',
+    qlHelper: 'IborSwapRateHelper', color: '#ef6c2c',
+    instruments: [
+      { en: true, type: 'IRS', tenor: '1Y',  ticker: 'CADAB3BC3M1Y=',  quote: 3.480, unit: '%' },
+      { en: true, type: 'IRS', tenor: '2Y',  ticker: 'CADAB3BC3M2Y=',  quote: 3.280, unit: '%' },
+      { en: true, type: 'IRS', tenor: '5Y',  ticker: 'CADAB3BC3M5Y=',  quote: 3.180, unit: '%' },
+      { en: true, type: 'IRS', tenor: '10Y', ticker: 'CADAB3BC3M10Y=', quote: 3.260, unit: '%' },
+    ],
+  },
+  {
+    id: 'CAD_FUNDING', ccy: 'CAD', flag: '🇨🇦', name: 'CAD Funding', fullName: 'CAD Firm Funding Curve',
+    curve_class: 'FUNDING', baseCurveId: 'CAD_CORRA', baseLabel: 'CAD CORRA OIS',
+    description: 'Firm cost of funds in CAD = CORRA OIS + firm credit spread.',
+    color: '#e8a020', spreadMode: 'term',
+    spreads: { ON: 12, M1: 18, M3: 25, M6: 32, Y1: 40, Y2: 50, Y3: 55, Y5: 62, Y10: 70 },
+    oisRef: { ON: 4.250, M1: 4.180, M3: 3.980, M6: 3.720, Y1: 3.420, Y2: 3.220, Y3: 3.150, Y5: 3.120, Y10: 3.200 },
+  },
+
+  // ── SEK ────────────────────────────────────────────────────
+  {
+    id: 'SEK_SWESTR', ccy: 'SEK', flag: '🇸🇪', name: 'SWESTR OIS', fullName: 'SEK SWESTR OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('SWESTR',1,ql.SEKCurrency(),ql.Sweden(),ql.Actual360())",
+    dayCounter: 'Actual/360', calendar: 'Sweden()', settlementDays: 1,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 1, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#d4aa00',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'SWESTR=',   quote: 2.500, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1M',  ticker: 'SEKOIS1M=', quote: 2.420, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'SEKOIS3M=', quote: 2.280, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '6M',  ticker: 'SEKOIS6M=', quote: 2.150, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'SEKOIS1Y=', quote: 2.050, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'SEKOIS5Y=', quote: 2.180, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'SEKOIS10Y=',quote: 2.300, unit: '%' },
+    ],
+  },
+
+  // ── NOK ────────────────────────────────────────────────────
+  {
+    id: 'NOK_NOWA', ccy: 'NOK', flag: '🇳🇴', name: 'NOWA OIS', fullName: 'NOK NOWA OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('NOWA',1,ql.NOKCurrency(),ql.Norway(),ql.Actual360())",
+    dayCounter: 'Actual/360', calendar: 'Norway()', settlementDays: 1,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 1, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#ef6c2c',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'NOWA=',    quote: 4.500, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'NOKOIS3M=',quote: 4.250, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'NOKOIS1Y=',quote: 3.750, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'NOKOIS5Y=',quote: 3.400, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'NOKOIS10Y=',quote:3.420, unit: '%' },
+    ],
+  },
+
+  // ── DKK ────────────────────────────────────────────────────
+  {
+    id: 'DKK_DESTR', ccy: 'DKK', flag: '🇩🇰', name: 'DESTR OIS', fullName: 'DKK DESTR OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('DESTR',1,ql.DKKCurrency(),ql.Denmark(),ql.Actual360())",
+    dayCounter: 'Actual/360', calendar: 'Denmark()', settlementDays: 1,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 1, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#c03040',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'DESTR=',   quote: 2.850, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'DKKOIS3M=',quote: 2.620, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'DKKOIS1Y=',quote: 2.380, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'DKKOIS5Y=',quote: 2.380, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'DKKOIS10Y=',quote:2.480, unit: '%' },
+    ],
+  },
+
+  // ── NZD ────────────────────────────────────────────────────
+  {
+    id: 'NZD_NZIONA', ccy: 'NZD', flag: '🇳🇿', name: 'NZIONA OIS', fullName: 'NZD NZIONA OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('NZIONA',0,ql.NZDCurrency(),ql.NewZealand(),ql.Actual365Fixed())",
+    dayCounter: 'Actual/365 Fixed', calendar: 'NewZealand()', settlementDays: 0,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 0, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#30a060',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'NZOCR=',   quote: 5.250, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'NZDOIS3M=',quote: 4.900, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'NZDOIS1Y=',quote: 4.300, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'NZDOIS5Y=',quote: 3.880, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'NZDOIS10Y=',quote:3.920, unit: '%' },
+    ],
+  },
+
+  // ── HKD ────────────────────────────────────────────────────
+  {
+    id: 'HKD_HONIA', ccy: 'HKD', flag: '🇭🇰', name: 'HONIA OIS', fullName: 'HKD HONIA OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('HONIA',0,ql.HKDCurrency(),ql.HongKong(),ql.Actual365Fixed())",
+    dayCounter: 'Actual/365 Fixed', calendar: 'HongKong()', settlementDays: 0,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 0, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#c87040',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'HONIAON=',  quote: 4.600, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'HKDOIS3M=', quote: 4.420, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'HKDOIS1Y=', quote: 4.150, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'HKDOIS5Y=', quote: 3.800, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'HKDOIS10Y=',quote: 3.820, unit: '%' },
+    ],
+  },
+
+  // ── SGD ────────────────────────────────────────────────────
+  {
+    id: 'SGD_SORA', ccy: 'SGD', flag: '🇸🇬', name: 'SORA OIS', fullName: 'SGD SORA OIS',
+    curve_class: 'OIS',
+    qlIndex: "ql.OvernightIndex('SORA',0,ql.SGDCurrency(),ql.Singapore(),ql.Actual365Fixed())",
+    dayCounter: 'Actual/365 Fixed', calendar: 'Singapore()', settlementDays: 0,
+    bdc: 'ModifiedFollowing', payFreq: 'Annual', payLag: 0, telescopic: true,
+    defaultInterp: 'LogLinearDiscount', accuracy: '1e-12', maxIter: 100, extrapolation: true,
+    color: '#40a8b8',
+    instruments: [
+      { en: true, type: 'OISDeposit', tenor: 'ON',  ticker: 'SORARATE=', quote: 3.650, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '3M',  ticker: 'SGDOIS3M=', quote: 3.450, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '1Y',  ticker: 'SGDOIS1Y=', quote: 3.150, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '5Y',  ticker: 'SGDOIS5Y=', quote: 2.920, unit: '%' },
+      { en: true, type: 'OIS',        tenor: '10Y', ticker: 'SGDOIS10Y=',quote: 2.980, unit: '%' },
+    ],
+  },
+
+  // ── XCCY BASIS ─────────────────────────────────────────────
+  {
+    id: 'XCCY_EURUSD', ccy: 'XCCY', ccy_dom: 'EUR', ccy_for: 'USD', flag: '🇪🇺🇺🇸',
+    name: 'EUR/USD XCCY', fullName: 'EUR/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['EUR_ESTR', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'EUR/USD XCCY basis swap — spread added to EUR leg. Typically negative (USD premium). Drives EUR-ccy trade FVA.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'EUBS1Y=',  quote: -20.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '2Y',  ticker: 'EUBS2Y=',  quote: -22.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '3Y',  ticker: 'EUBS3Y=',  quote: -24.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'EUBS5Y=',  quote: -26.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '7Y',  ticker: 'EUBS7Y=',  quote: -28.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'EUBS10Y=', quote: -30.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '20Y', ticker: 'EUBS20Y=', quote: -32.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '30Y', ticker: 'EUBS30Y=', quote: -30.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_GBPUSD', ccy: 'XCCY', ccy_dom: 'GBP', ccy_for: 'USD', flag: '🇬🇧🇺🇸',
+    name: 'GBP/USD XCCY', fullName: 'GBP/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['GBP_SONIA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'GBP/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'GBBS1Y=',  quote: -15.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'GBBS5Y=',  quote: -18.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'GBBS10Y=', quote: -20.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '30Y', ticker: 'GBBS30Y=', quote: -18.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_JPYUSD', ccy: 'XCCY', ccy_dom: 'JPY', ccy_for: 'USD', flag: '🇯🇵🇺🇸',
+    name: 'JPY/USD XCCY', fullName: 'JPY/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['JPY_TONAR', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'JPY/USD XCCY basis. Typically negative and large in magnitude.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'JYBS1Y=',  quote: -45.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'JYBS5Y=',  quote: -50.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'JYBS10Y=', quote: -55.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '30Y', ticker: 'JYBS30Y=', quote: -48.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_CHFUSD', ccy: 'XCCY', ccy_dom: 'CHF', ccy_for: 'USD', flag: '🇨🇭🇺🇸',
+    name: 'CHF/USD XCCY', fullName: 'CHF/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['CHF_SARON', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'CHF/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'CHBS1Y=',  quote: -10.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'CHBS5Y=',  quote: -12.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'CHBS10Y=', quote: -14.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_AUDUSD', ccy: 'XCCY', ccy_dom: 'AUD', ccy_for: 'USD', flag: '🇦🇺🇺🇸',
+    name: 'AUD/USD XCCY', fullName: 'AUD/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['AUD_AONIA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'AUD/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'ADBS1Y=',  quote: -18.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'ADBS5Y=',  quote: -20.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'ADBS10Y=', quote: -22.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_CADUSD', ccy: 'XCCY', ccy_dom: 'CAD', ccy_for: 'USD', flag: '🇨🇦🇺🇸',
+    name: 'CAD/USD XCCY', fullName: 'CAD/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['CAD_CORRA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'CAD/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'CDBS1Y=',  quote: -12.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'CDBS5Y=',  quote: -14.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'CDBS10Y=', quote: -15.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_SEKUSD', ccy: 'XCCY', ccy_dom: 'SEK', ccy_for: 'USD', flag: '🇸🇪🇺🇸',
+    name: 'SEK/USD XCCY', fullName: 'SEK/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['SEK_SWESTR', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'SEK/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'SKBS1Y=',  quote: -35.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'SKBS5Y=',  quote: -38.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'SKBS10Y=', quote: -40.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_NOKUSD', ccy: 'XCCY', ccy_dom: 'NOK', ccy_for: 'USD', flag: '🇳🇴🇺🇸',
+    name: 'NOK/USD XCCY', fullName: 'NOK/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['NOK_NOWA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'NOK/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'NOBS1Y=',  quote: -40.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'NOBS5Y=',  quote: -42.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'NOBS10Y=', quote: -44.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_NZDUSD', ccy: 'XCCY', ccy_dom: 'NZD', ccy_for: 'USD', flag: '🇳🇿🇺🇸',
+    name: 'NZD/USD XCCY', fullName: 'NZD/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['NZD_NZIONA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'NZD/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'NZBS1Y=',  quote: -22.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'NZBS5Y=',  quote: -24.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'NZBS10Y=', quote: -25.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_HKDUSD', ccy: 'XCCY', ccy_dom: 'HKD', ccy_for: 'USD', flag: '🇭🇰🇺🇸',
+    name: 'HKD/USD XCCY', fullName: 'HKD/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['HKD_HONIA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'HKD/USD XCCY basis. Near zero due to currency peg.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'HKBS1Y=',  quote: -2.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'HKBS5Y=',  quote: -3.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'HKBS10Y=', quote: -3.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_SGDUSD', ccy: 'XCCY', ccy_dom: 'SGD', ccy_for: 'USD', flag: '🇸🇬🇺🇸',
+    name: 'SGD/USD XCCY', fullName: 'SGD/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['SGD_SORA', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'SGD/USD XCCY basis.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'SGBS1Y=',  quote: -25.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'SGBS5Y=',  quote: -28.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'SGBS10Y=', quote: -30.0, unit: 'bp' },
+    ],
+  },
+  {
+    id: 'XCCY_DKKUSD', ccy: 'XCCY', ccy_dom: 'DKK', ccy_for: 'USD', flag: '🇩🇰🇺🇸',
+    name: 'DKK/USD XCCY', fullName: 'DKK/USD Cross-Currency Basis',
+    curve_class: 'XCCY', parentCurves: ['DKK_DESTR', 'USD_SOFR'], color: '#9060cc', sprint: 6,
+    description: 'DKK/USD XCCY basis. Closely tracks EUR/USD given DKK peg to EUR.',
+    instruments: [
+      { en: true, type: 'XCCY', tenor: '1Y',  ticker: 'DKBS1Y=',  quote: -21.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '5Y',  ticker: 'DKBS5Y=',  quote: -27.0, unit: 'bp' },
+      { en: true, type: 'XCCY', tenor: '10Y', ticker: 'DKBS10Y=', quote: -31.0, unit: 'bp' },
+    ],
+  },
+];
+
+// ── SIDEBAR GROUPS ─────────────────────────────────────────
+export const CCY_GROUPS = [
+  { ccy: 'USD',  flag: '🇺🇸', label: 'USD',       ids: ['USD_SOFR','USD_EFFR','USD_TSOFR_1M','USD_TSOFR_3M','USD_TSOFR_6M','USD_1M3M','USD_3M6M','USD_FUNDING'] },
+  { ccy: 'EUR',  flag: '🇪🇺', label: 'EUR',       ids: ['EUR_ESTR','EUR_EURIBOR_3M','EUR_EURIBOR_6M','EUR_1M3M','EUR_3M6M','EUR_FUNDING'] },
+  { ccy: 'GBP',  flag: '🇬🇧', label: 'GBP',       ids: ['GBP_SONIA','GBP_SONIA_3M','GBP_FUNDING'] },
+  { ccy: 'JPY',  flag: '🇯🇵', label: 'JPY',       ids: ['JPY_TONAR','JPY_TIBOR_3M','JPY_TIBOR_6M','JPY_FUNDING'] },
+  { ccy: 'CHF',  flag: '🇨🇭', label: 'CHF',       ids: ['CHF_SARON','CHF_SARON_3M','CHF_FUNDING'] },
+  { ccy: 'AUD',  flag: '🇦🇺', label: 'AUD',       ids: ['AUD_AONIA','AUD_BBSW_3M','AUD_BBSW_6M','AUD_FUNDING'] },
+  { ccy: 'CAD',  flag: '🇨🇦', label: 'CAD',       ids: ['CAD_CORRA','CAD_CDOR_3M','CAD_FUNDING'] },
+  { ccy: 'SEK',  flag: '🇸🇪', label: 'SEK',       ids: ['SEK_SWESTR'] },
+  { ccy: 'NOK',  flag: '🇳🇴', label: 'NOK',       ids: ['NOK_NOWA'] },
+  { ccy: 'DKK',  flag: '🇩🇰', label: 'DKK',       ids: ['DKK_DESTR'] },
+  { ccy: 'NZD',  flag: '🇳🇿', label: 'NZD',       ids: ['NZD_NZIONA'] },
+  { ccy: 'HKD',  flag: '🇭🇰', label: 'HKD',       ids: ['HKD_HONIA'] },
+  { ccy: 'SGD',  flag: '🇸🇬', label: 'SGD',       ids: ['SGD_SORA'] },
+  { ccy: 'XCCY', flag: '↔',   label: 'XCCY Basis', ids: ['XCCY_EURUSD','XCCY_GBPUSD','XCCY_JPYUSD','XCCY_CHFUSD','XCCY_AUDUSD','XCCY_CADUSD','XCCY_SEKUSD','XCCY_NOKUSD','XCCY_NZDUSD','XCCY_HKDUSD','XCCY_SGDUSD','XCCY_DKKUSD'] },
+];
+
+// ── INTERPOLATION METHODS ──────────────────────────────────
+export const INTERP_METHODS = [
+  { id: 'LogLinearDiscount', name: 'Log-Linear (Discount)',  ql: 'ql.PiecewiseLogLinearDiscount',  trait: 'Discount',    desc: 'Default for OIS. Positive forwards guaranteed.',     tags: ['Recommended', 'Default'] },
+  { id: 'LinearZero',        name: 'Linear (Zero)',          ql: 'ql.PiecewiseLinearZero',         trait: 'ZeroYield',   desc: 'Simple, fast. Discontinuous forwards.',              tags: ['Fast'] },
+  { id: 'CubicZero',         name: 'Cubic Spline (Zero)',    ql: 'ql.PiecewiseCubicZero',          trait: 'ZeroYield',   desc: 'Smooth forwards. Oscillation risk.',                 tags: ['Smooth fwd'] },
+  { id: 'LogCubicDiscount',  name: 'Log-Cubic (Discount)',   ql: 'ql.PiecewiseLogCubicDiscount',   trait: 'Discount',    desc: 'Good balance, smooth. Positive forwards.',           tags: ['Stable'] },
+  { id: 'MonotoneCubicZero', name: 'Monotone Cubic (Zero)',  ql: 'ql.PiecewiseMonotoneCubicZero',  trait: 'ZeroYield',   desc: 'Hyman filter — no oscillations.',                   tags: ['No oscillations'] },
+  { id: 'FlatForward',       name: 'Flat Forward',           ql: 'ql.PiecewiseFlatForward',        trait: 'ForwardRate', desc: 'Step-function forwards. Max locality.',              tags: ['Maximally local'] },
+  { id: 'ConvexMonotone',    name: 'Convex Monotone',        ql: 'ql.PiecewiseConvexMonotone',     trait: 'ForwardRate', desc: 'Positive forwards, good locality.',                  tags: ['Positive fwd'] },
+  { id: 'KrugerZero',        name: 'Kruger (Zero)',          ql: 'ql.PiecewiseKrugerZero',         trait: 'ZeroYield',   desc: 'Monotone, no global dampening.',                    tags: ['Monotone'] },
+];
+
+// ── SURFACE TYPES (placeholder data) ──────────────────────
+export const SURFACE_TYPES = [
+  {
+    name: 'Swaption ATM Vol', sub: 'Normal (bp/yr)',
+    expiries: ['1M','3M','6M','1Y','2Y','3Y','5Y'],
+    tenors:   ['1Y','2Y','3Y','5Y','7Y','10Y','20Y'],
+    gen: () => Array.from({ length: 7 }, (_, i) => Array.from({ length: 7 }, (_, j) => 62 + Math.random() * 38 + i * 4 - j * 2.5)),
+  },
+  {
+    name: 'Cap/Floor Vol', sub: 'Lognormal',
+    expiries: ['1Y','2Y','3Y','5Y','7Y','10Y'],
+    tenors:   ['1%','2%','3%','4%','5%','6%'],
+    gen: () => Array.from({ length: 6 }, (_, i) => Array.from({ length: 6 }, (_, j) => 26 + Math.random() * 28 + i * 2 - j)),
+  },
+  {
+    name: 'Bond Option Vol', sub: 'Yield vol (bp/yr)',
+    expiries: ['1M','3M','6M','1Y','2Y'],
+    tenors:   ['2Y','5Y','10Y','20Y','30Y'],
+    gen: () => Array.from({ length: 5 }, (_, i) => Array.from({ length: 5 }, (_, j) => 42 + Math.random() * 22 + i * 3 - j * 1.8)),
+  },
+];
+
+// ── ON INDEX FIXINGS ───────────────────────────────────────
+export const FIXINGS = [
+  { id: 'SOFR',   name: 'SOFR',   ccy: 'USD', latest: 5.310 },
+  { id: 'ESTR',   name: '€STR',   ccy: 'EUR', latest: 3.400 },
+  { id: 'SONIA',  name: 'SONIA',  ccy: 'GBP', latest: 4.950 },
+  { id: 'TONAR',  name: 'TONAR',  ccy: 'JPY', latest: 0.230 },
+  { id: 'SARON',  name: 'SARON',  ccy: 'CHF', latest: 0.900 },
+  { id: 'AONIA',  name: 'AONIA',  ccy: 'AUD', latest: 4.350 },
+  { id: 'CORRA',  name: 'CORRA',  ccy: 'CAD', latest: 4.250 },
+  { id: 'SWESTR', name: 'SWESTR', ccy: 'SEK', latest: 2.500 },
+  { id: 'NOWA',   name: 'NOWA',   ccy: 'NOK', latest: 4.500 },
+  { id: 'DESTR',  name: 'DESTR',  ccy: 'DKK', latest: 2.850 },
+  { id: 'NZIONA', name: 'NZIONA', ccy: 'NZD', latest: 5.250 },
+  { id: 'HONIA',  name: 'HONIA',  ccy: 'HKD', latest: 4.600 },
+  { id: 'SORA',   name: 'SORA',   ccy: 'SGD', latest: 3.650 },
+];
+
+// ── BBG SNAP MAP ───────────────────────────────────────────
+export const BBG_MAP = {
+  'USOSFR=':    ['USD_SOFR', 'ON'],
+  'USOSFR1Y=':  ['USD_SOFR', '1Y'],
+  'USOSFR5Y=':  ['USD_SOFR', '5Y'],
+  'USOSFR10Y=': ['USD_SOFR', '10Y'],
+  'ESTRRATE=':  ['EUR_ESTR', 'ON'],
+  'EURESTR1Y=': ['EUR_ESTR', '1Y'],
+  'EURESTR5Y=': ['EUR_ESTR', '5Y'],
+  'SONIAONN=':  ['GBP_SONIA', 'ON'],
+  'SONIAOIS1Y=':['GBP_SONIA', '1Y'],
+  'TONAR=':     ['JPY_TONAR', 'ON'],
+};
+
+// ── HELPERS ────────────────────────────────────────────────
+export const getCurve = (id) => RATES_CURVES.find((c) => c.id === id);
+
+export const TENOR_LABELS = {
+  ON: 'ON', W1: '1W', M1: '1M', M3: '3M', M6: '6M',
+  Y1: '1Y', Y2: '2Y', Y3: '3Y', Y5: '5Y', Y7: '7Y',
+  Y10: '10Y', Y20: '20Y', Y30: '30Y',
+};
+
+export const TENOR_TO_YEARS = {
+  ON: 1/365, '1W': 7/365, '2W': 14/365, '1M': 1/12, '2M': 2/12,
+  '3M': 3/12, '6M': 6/12, '9M': 9/12, '1Y': 1, '18M': 1.5,
+  '2Y': 2, '3Y': 3, '5Y': 5, '7Y': 7, '10Y': 10, '20Y': 20, '30Y': 30,
+};
