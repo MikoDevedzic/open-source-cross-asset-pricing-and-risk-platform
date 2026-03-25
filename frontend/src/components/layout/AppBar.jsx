@@ -1,7 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_ITEMS = [
-  { label: 'MARKET DATA', path: '/configurations/market-data' },
   { label: 'PRICER',      path: '/pricer',      sprint: 5  },
   { label: 'MARKET RISK', path: '/market-risk', sprint: 10 },
   { label: 'CCR',         path: '/ccr',         sprint: 14 },
