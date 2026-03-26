@@ -431,3 +431,51 @@ html, body, #root {
 .inp:focus   { border-color: var(--accent-dim); }
 .lbl         { font-size: 8.5px; color: var(--text-dim); margin-bottom: 3px; display: block; }
 .row         { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+
+/* ── AUTH PAGES ───────────────────────────────────────────── */
+.auth-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg-deep);padding:2rem}
+.auth-card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--border);padding:2.5rem 2rem;display:flex;flex-direction:column;align-items:center}
+.auth-card--confirm{max-width:460px;padding:3rem 2.5rem}
+.auth-logo{font-family:var(--mono);font-size:1.5rem;font-weight:700;letter-spacing:0.25em;color:var(--accent);margin-bottom:0.25rem}
+.auth-tagline{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;color:var(--text-muted);text-transform:uppercase;margin-bottom:2rem}
+.auth-form{width:100%;display:flex;flex-direction:column;gap:1rem;margin-bottom:1.25rem}
+.auth-field{display:flex;flex-direction:column;gap:0.35rem}
+.auth-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--text-muted)}
+.auth-input{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:13px;padding:0.6rem 0.75rem;outline:none;transition:border-color 0.15s;width:100%;box-sizing:border-box}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input::placeholder{color:var(--text-muted);opacity:0.5}
+.auth-handle-preview{background:var(--bg-deep);border:1px solid var(--accent);border-left:3px solid var(--accent);padding:0.5rem 0.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;box-sizing:border-box}
+.auth-handle-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text-muted);flex-shrink:0}
+.auth-handle-value{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.05em}
+.auth-error{font-family:var(--mono);font-size:11px;color:var(--red);border:1px solid var(--red);padding:0.5rem 0.75rem;background:rgba(217,80,64,0.08)}
+.auth-btn{background:var(--accent);color:var(--bg-deep);border:none;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.15em;padding:0.75rem 1rem;cursor:pointer;transition:opacity 0.15s;width:100%;margin-top:0.25rem}
+.auth-btn:hover:not(:disabled){opacity:0.85}
+.auth-btn:disabled{opacity:0.5;cursor:not-allowed}
+.auth-footer{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:center;margin:0}
+.auth-link{color:var(--accent);text-decoration:none}
+.auth-link:hover{text-decoration:underline}
+.auth-sub{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-align:center;line-height:1.6;margin:0}
+.auth-email-highlight{color:var(--text)}
+.confirm-welcome{font-family:var(--mono);font-size:15px;color:var(--text);letter-spacing:0.05em;margin:1.5rem 0 2rem;text-align:center;font-style:italic}
+.confirm-handle-block{background:var(--bg-deep);border:1px solid var(--accent);padding:1.25rem 2rem;display:flex;flex-direction:column;align-items:center;gap:0.4rem;width:100%;box-sizing:border-box;margin-bottom:1.5rem}
+.confirm-handle-label{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--text-muted)}
+.confirm-handle-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);letter-spacing:0.08em}
+.confirm-note{margin-bottom:1.5rem;font-size:11px}
+.auth-confirm-icon{font-size:2rem;color:var(--accent);margin:1rem 0}
+.appbar-role{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--amber);text-transform:uppercase}
+.appbar-trader{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.05em}
+.appbar-signout{background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:9px;letter-spacing:0.12em;padding:0.2rem 0.5rem;cursor:pointer;margin-left:0.5rem;transition:border-color 0.15s,color 0.15s}
+.appbar-signout:hover{border-color:var(--red);color:var(--red)}
+
+/* APP SHELL LAYOUT */
+.app-root{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.app-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.app-content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.appbar{height:48px;background:var(--bg-deep);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;z-index:10}
+.appbar-left{display:flex;align-items:center;gap:10px}
+.appbar-right{display:flex;align-items:center;gap:8px}
+.appbar-logo{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.2em}
+.appbar-separator{color:var(--border-hi);font-size:11px}
+.appbar-system{font-size:9px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase}
+.md-root{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.md-content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
