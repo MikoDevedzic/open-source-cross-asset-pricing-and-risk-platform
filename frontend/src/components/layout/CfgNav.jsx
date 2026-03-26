@@ -1,46 +1,70 @@
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-const CFG_ITEMS = [
-  { label: 'Market Data',   path: '/configurations/market-data' },
-  { label: 'Org Hierarchy', path: '/configurations/org-hierarchy' },
-  { label: 'Onboarding',    path: '/configurations/onboarding',  sprint: 7  },
-  { label: 'Market Risk',   path: '/configurations/market-risk', sprint: 10 },
-  { label: 'CCR',           path: '/configurations/ccr',         sprint: 14 },
-  { label: 'Methodology',   path: '/configurations/methodology', sprint: 19 },
+const SECTIONS = [
+  {
+    label: 'MARKET DATA',
+    links: [
+      { to:'/configurations/market-data/curves', label:'CURVES' }
+    ]
+  },
+  {
+    label: 'ORG',
+    links: [
+      { to:'/configurations/org-hierarchy', label:'ORG HIERARCHY' }
+    ]
+  },
+  {
+    label: 'ONBOARDING',
+    links: [
+      { to:'/configurations/legal-entities',  label:'LEGAL ENTITIES' },
+      { to:'/configurations/counterparties',  label:'COUNTERPARTIES' }
+    ]
+  }
 ]
 
 export default function CfgNav() {
-  const { pathname } = useLocation()
   return (
-    <div style={{
-      position: 'fixed', top: 'var(--appbar-h)', left: 0, right: 0,
-      height: 'var(--cfgnav-h)', zIndex: 90,
-      background: 'var(--panel)',
-      borderBottom: '1px solid var(--border)',
-      display: 'flex', alignItems: 'center',
-      padding: '0 16px', gap: '4px',
+    <nav style={{
+      width:'200px', minWidth:'200px', flexShrink:0,
+      background:'var(--panel)',
+      borderRight:'1px solid var(--panel-3)',
+      overflowY:'auto',
+      padding:'16px 0'
     }}>
-      <span className="rj-label" style={{ marginRight: 12 }}>CONFIGURATIONS</span>
-      <div style={{ width: 1, height: 16, background: 'var(--border)', marginRight: 8 }} />
-      {CFG_ITEMS.map(item => {
-        const active = pathname.startsWith(item.path)
-        const isStub = !!item.sprint
+      {SECTIONS.map(function(section) {
         return (
-          <NavLink key={item.path} to={item.path} style={{
-            display: 'inline-flex', alignItems: 'center',
-            padding: '3px 10px', borderRadius: 3,
-            textDecoration: 'none', fontSize: '11px',
-            fontFamily: 'var(--mono)', letterSpacing: '0.04em',
-            fontWeight: active ? 500 : 400,
-            color: active ? 'var(--accent)' : isStub ? 'var(--text-dim)' : 'var(--text)',
-            background: active ? 'var(--accent-dim)' : 'transparent',
-            border: active ? '1px solid var(--accent-dim)' : '1px solid transparent',
-          }}>
-            {item.label}
-            {isStub && <span style={{ marginLeft: 5, fontSize: 9, color: 'var(--text-dim)' }}>S{item.sprint}</span>}
-          </NavLink>
+          <div key={section.label} style={{ marginBottom:'20px' }}>
+            <div style={{
+              fontSize:'9px', fontFamily:'var(--mono)',
+              color:'var(--text-dim)', letterSpacing:'0.14em',
+              padding:'0 16px 6px', opacity:0.55
+            }}>
+              {section.label}
+            </div>
+            {section.links.map(function(link) {
+              return (
+                <NavLink key={link.to} to={link.to}
+                  style={function(p) {
+                    return {
+                      display:'block', padding:'7px 16px',
+                      fontFamily:'var(--mono)', fontSize:'11px',
+                      letterSpacing:'0.06em', textDecoration:'none',
+                      color: p.isActive ? 'var(--accent)' : 'var(--text-dim)',
+                      background: p.isActive
+                        ? 'color-mix(in srgb, var(--accent) 8%, transparent)'
+                        : 'transparent',
+                      borderLeft: p.isActive
+                        ? '2px solid var(--accent)'
+                        : '2px solid transparent'
+                    }
+                  }}>
+                  {link.label}
+                </NavLink>
+              )
+            })}
+          </div>
         )
       })}
-    </div>
+    </nav>
   )
 }

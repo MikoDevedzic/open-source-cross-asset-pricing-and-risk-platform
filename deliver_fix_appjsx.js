@@ -1,4 +1,22 @@
-import { useEffect } from 'react'
+// deliver_fix_appjsx.js — Rijeka Day 5 hotfix
+// Restores initAuth() call that was dropped in Day 5 delivery
+//
+// node C:\Users\mikod\OneDrive\Desktop\Rijeka\deliver_fix_appjsx.js
+
+const fs   = require('fs')
+const path = require('path')
+
+const ROOT = 'C:\\Users\\mikod\\OneDrive\\Desktop\\Rijeka'
+
+function write(rel, content) {
+  const full = path.join(ROOT, rel.split('/').join(path.sep))
+  fs.mkdirSync(path.dirname(full), { recursive: true })
+  fs.writeFileSync(full, content, 'utf8')
+  console.log('  ✅  ' + rel)
+}
+
+write('frontend/src/App.jsx',
+`import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { useAuthStore } from './store/useAuthStore'
 import LoginPage     from './components/auth/LoginPage'
@@ -68,3 +86,13 @@ export default function App() {
     </Router>
   )
 }
+`)
+
+console.log(`
+✅  Done.
+
+  node C:\\Users\\mikod\\OneDrive\\Desktop\\Rijeka\\deliver_fix_appjsx.js
+
+Then hard-refresh the browser (Ctrl+Shift+R).
+You should go straight through to /command-center.
+`)
