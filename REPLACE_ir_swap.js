@@ -1,4 +1,8 @@
-"""
+// REPLACE_ir_swap.js — complete replacement of backend/pricing/ir_swap.py
+const fs = require('fs');
+const FILE = 'C:\\Users\\mikod\\OneDrive\\Desktop\\Rijeka\\backend\\pricing\\ir_swap.py';
+
+const content = `"""
 Rijeka — IR Swap Pricer
 Sprint 3D: fixed NPV + float NPV, full ISDA schedule.
 Sprint 4G: per-leg IR01/IR01_DISC, df/zero_rate in CashflowResult.
@@ -199,3 +203,8 @@ def price_swap(
 
     total_npv = sum(r.pv for r in leg_results)
     return SwapResult(trade_id=trade_id, npv=total_npv, legs=leg_results)
+`;
+
+fs.writeFileSync(FILE, content, 'utf8');
+console.log('Done. ir_swap.py fully replaced — per-leg IR01/IR01_DISC + df/zero_rate in cashflows.');
+console.log('Backend auto-reloads. RUN PRICER to verify.');
